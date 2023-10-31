@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "target": "es2021",
+    "module": "ES2020",
+    "experimentalDecorators": true,
+    "allowJs": true,
+    "checkJs": true,
+    "outDir": "dist",
+    "strict": false,
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "noImplicitThis": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "alwaysStrict": true,
+    "moduleResolution": "node",
+    "lib": [
+      "es2020",
+      "esnext.array",
+      "DOM"
+    ]
+  },
+  "ts-node": {
+    "esm": true
+  },
+  "include": [
+    "./src"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
