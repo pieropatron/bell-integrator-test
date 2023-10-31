@@ -2,15 +2,15 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class Order {
-  @PrimaryGeneratedColumn()
-  id: string;
+	@PrimaryGeneratedColumn()
+	id: string;
 
-  @Column()
-  productName: string;
+	@Column()
+	productName: string;
 
-  @Column()
-  creationDate: Date;
+	@Column()
+	creationDate: Date;
 
-  @Column()
-  status: string;
+	@Column()
+	status: string;
 }
