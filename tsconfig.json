@@ -20,7 +20,8 @@
       "es2020",
       "esnext.array",
       "DOM"
-    ]
+    ],
+    "emitDecoratorMetadata": true
   },
   "ts-node": {
     "esm": true

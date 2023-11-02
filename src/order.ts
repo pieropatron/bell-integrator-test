@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, ObjectIdColumn, ObjectId, Column } from 'typeorm';
 
 @Entity()
 export class Order {
-	@PrimaryGeneratedColumn()
-	id: string;
+	@ObjectIdColumn()
+	_id: ObjectId;
 
 	@Column()
 	productName: string;
@@ -12,5 +12,5 @@ export class Order {
 	creationDate: Date;
 
 	@Column()
-	status: string;
+	status: 'new' | 'packed' | 'processing' | 'delivered' | 'return';
 }
