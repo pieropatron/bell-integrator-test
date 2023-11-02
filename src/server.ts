@@ -4,6 +4,9 @@ import { DataSource } from 'typeorm';
 import Joi from '@hapi/joi';
 import fsp from 'fs/promises';
 import { ObjectId } from 'mongodb';
+import { Logger } from '@pieropatron/tinylogger';
+
+const logger = new Logger('http-service');
 
 import { Order } from './order.js';
 import { DeliverySettings } from './delivery-settings.js';
@@ -159,20 +162,27 @@ const start_app = async () => {
 	app.use((error: Error, req, res, next) => {
 		if (error) {
 			try {
-				console.error(error);
+				logger.error(error);
 				res.status(500).json({ error: 'Internal server error' });
 			} catch (e) {
-				console.error(`final express error`, e);
+				logger.error(`final express error`, e);
 			}
 		}
 	});
 
 	app.listen(3000, () => {
-		console.log('Server is running on port 3000');
+		logger.info('Server is running on port 3000');
 	});
 };
 
-start_app().catch(e => {
-	console.error(e);
-	process.exit(1);
-});
+logger.level = 'debug';
+const time_start = logger.time('init app');
+start_app()
+	.then(() => {
+		time_start();
+	})
+	.catch(e => {
+		time_start();
+		logger.fatal(e);
+		process.exit(1);
+	});
