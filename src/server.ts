@@ -134,21 +134,25 @@ const start_app = async () => {
 
 	app.use('/order', routeOrder);
 
-	app.get('/delivery', async (req, res) => {
-		const delivery_data = await fsp.readFile('delivery.csv', 'utf8');
-		const delivery: DeliverySettings[] = [];
-		delivery_data.split('\n').forEach(line => {
-			line = line.trim();
-			if (!line) return;
-			const [id, settingName, settingValue] = line.split('\t');
-			const item = new DeliverySettings();
-			item.id = id;
-			item.settingName = settingName;
-			item.settingValue = settingValue;
-			delivery.push(item);
-		});
+	app.get('/delivery', async (req, res, next) => {
+		try {
+			const delivery_data = await fsp.readFile('delivery.csv', 'utf8');
+			const delivery: DeliverySettings[] = [];
+			delivery_data.split('\n').forEach(line => {
+				line = line.trim();
+				if (!line) return;
+				const [id, settingName, settingValue] = line.split('\t');
+				const item = new DeliverySettings();
+				item.id = id;
+				item.settingName = settingName;
+				item.settingValue = settingValue;
+				delivery.push(item);
+			});
 
-		res.json(delivery);
+			res.json(delivery);
+		} catch (e) {
+			next(e);
+		}
 	});
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
