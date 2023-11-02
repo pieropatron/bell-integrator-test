@@ -5,6 +5,8 @@ import Joi from '@hapi/joi';
 import fsp from 'fs/promises';
 import { ObjectId } from 'mongodb';
 import { Logger } from '@pieropatron/tinylogger';
+import 'dotenv/config';
+import jwt from 'jsonwebtoken';
 
 const logger = new Logger('http-service');
 
@@ -13,13 +15,18 @@ import { DeliverySettings } from './delivery-settings.js';
 
 const DS = new DataSource({
 	type: 'mongodb',
-	host: '127.0.0.1',
-	// host: 'localhost',
-	port: 27017,
-	database: 'test',
+	host: process.env.db_host,
+	port: parseInt(process.env.db_port || '27017'),
+	database: process.env.db_name,
 	synchronize: false,
 	entities: [Order],
 });
+
+const JWT_CFG = {
+	key: process.env.jwt_key || 'key',
+	iss: process.env.jwt_iss || 'iss',
+	expires: process.env.jwt_expires || '1m',
+};
 
 const orderRepository = DS.getMongoRepository(Order);
 
@@ -54,12 +61,30 @@ type OrderResp = Response<any, any> & {
 };
 
 const start_app = async () => {
+	// Init datasource
+	await DS.initialize();
+
 	// Create Express app
 	const app = express();
 	app.use(bodyParser.json());
-	await DS.initialize();
 
-	// Route
+	app.all('*', (req, res, next) => {
+		const auth = req.headers['authorization'];
+		if (!auth) {
+			return res.status(401).json({ error: 'Unauthorized' });
+		}
+
+		const token = auth.slice(6).trim();
+		return jwt.verify(token, JWT_CFG.key, { issuer: JWT_CFG.iss }, error => {
+			if (error) {
+				return res.status(404).json({ error: 'Forbidden' });
+			} else {
+				return next();
+			}
+		});
+	});
+
+	// Order Route
 	const routeOrder = express.Router();
 
 	routeOrder.all('*', async (req, res: OrderResp, next) => {
