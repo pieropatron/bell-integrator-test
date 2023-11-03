@@ -15,9 +15,7 @@ import { DeliverySettings } from './delivery-settings.js';
 
 const DS = new DataSource({
 	type: 'mongodb',
-	host: process.env.db_host,
-	port: parseInt(process.env.db_port || '27017'),
-	database: process.env.db_name,
+	url: process.env.db_url,
 	synchronize: false,
 	entities: [Order],
 });
