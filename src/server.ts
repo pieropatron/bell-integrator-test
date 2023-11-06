@@ -31,7 +31,7 @@ const orderRepository = DS.getMongoRepository(Order);
 // Define the validation schema using Joi
 const schemaAlterCommon: Record<string, Joi.SchemaFunction> = {
 	post: schema => schema.required(),
-	patch: schema => schema.optional(),
+	patch: schema => schema.forbidden(),
 	get: schema => schema.optional(),
 };
 
@@ -43,7 +43,13 @@ const orderSchemaBase = Joi.object({
 	}),
 	productName: Joi.string().alter(schemaAlterCommon),
 	creationDate: Joi.date().alter(schemaAlterCommon),
-	status: Joi.string().valid('new', 'packed', 'processing', 'delivered', 'return').alter(schemaAlterCommon),
+	status: Joi.string()
+		.valid('new', 'packed', 'processing', 'delivered', 'return')
+		.alter({
+			post: schema => schema.required(),
+			patch: schema => schema.required(),
+			get: schema => schema.optional(),
+		}),
 });
 
 const orderSchemas = {
