@@ -2,12 +2,12 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class DeliverySettings {
-  @PrimaryGeneratedColumn()
-  id: string;
+	@PrimaryGeneratedColumn()
+	id: string;
 
-  @Column()
-  settingName: string;
+	@Column()
+	settingName: string;
 
-  @Column()
-  settingValue: string;
+	@Column()
+	settingValue: string;
 }

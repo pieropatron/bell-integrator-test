@@ -1,1 +1,5 @@
 node_modules
+temp*.ts
+dist
+delivery.csv
+.env

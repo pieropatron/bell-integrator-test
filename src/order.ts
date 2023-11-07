@@ -1,16 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, ObjectIdColumn, ObjectId, Column } from 'typeorm';
 
 @Entity()
 export class Order {
-  @PrimaryGeneratedColumn()
-  id: string;
+	@ObjectIdColumn()
+	_id: ObjectId;
 
-  @Column()
-  productName: string;
+	@Column()
+	productName: string;
 
-  @Column()
-  creationDate: Date;
+	@Column()
+	creationDate: Date;
 
-  @Column()
-  status: string;
+	@Column()
+	status: 'new' | 'packed' | 'processing' | 'delivered' | 'return';
 }

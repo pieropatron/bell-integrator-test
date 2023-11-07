@@ -1,5 +1,5 @@
 # Use official Node.js image
-FROM node:16
+FROM node:18
 
 # Set working directory
 WORKDIR /usr/src/app
@@ -9,12 +9,13 @@ COPY package*.json ./
 
 # Install app dependencies
 RUN npm install
+RUN npm install typescript -g
 
 # Bundle app source
 COPY . .
 
 # Expose port
-EXPOSE 8080
+EXPOSE 3000
 
 # Command to run the app
-CMD [ "node", "server.ts" ]
+CMD [ "npm", "run", "start" ]
